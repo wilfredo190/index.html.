@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Vistas y Likes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #4CAF50; /* Verde */
+    }
+    .box {
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      display: inline-block;
+    }
+    .timer {
+      color: red;
+      font-size: 24px;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .expired {
+      color: red;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    .password-container {
+      margin-top: 20px;
+    }
+    .password-container input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .eye-icon {
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+    .warning {
+      color: #ff0000;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .discount-message {
+      color: #4CAF50;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Nombre de Usuario: AVL Oficial</h2>
+    <p>Contraseña: <input type="password" id="passwordInput" value="nobita2025" disabled>
+      <span id="eyeIcon" class="eye-icon" onclick="togglePassword()">👁️</span>
+    </p>
+    <p>Expiración de la app: <span id="countdown" class="timer">30:00</span> minutos</p>
+    <p>Generador de Vistas y Likes</p>
+    
+    <!-- Botón que redirige al enlace de Zefoy -->
+    <a href="https://zefoy.com/#google_vignette" class="button" target="_blank" id="btnStart">Empezar a Generar</a>
+    
+    <div id="expiredMessage" class="expired" style="display: none;">La sesión ha expirado. La página se redirigirá pronto.</div>
+    <div class="message">Una vez expirado el servicio, este dejará de funcionar.</div>
+    
+    <!-- Mensaje de advertencia -->
+    <div class="warning">No comparta la contraseña con nadie, de lo contrario la página dejará de funcionar.</div>
+    
+    <!-- Nuevo mensaje de expiración con descuento -->
+    <div id="discountMessage" class="discount-message" style="display: none;">
+      Esta app ha expirado, por favor vuelve a contratar el servicio para seguir usándola. <br>
+      50% de descuento a usuarios nuevos que deseen contratar por segunda vez.
+    </div>
+  </div>
+
+  <script>
+    // Tiempo en segundos
+    var timeLeft = localStorage.getItem('timeLeft') ? localStorage.getItem('timeLeft') : 1800; // 30 minutos (1800 segundos)
+    var countdownElement = document.getElementById("countdown");
+    var expiredMessage = document.getElementById("expiredMessage");
+    var button = document.getElementById("btnStart");
+    var discountMessage = document.getElementById("discountMessage");
+
+    // Temporizador de expiración
+    var countdownTimer = setInterval(function() {
+      timeLeft--;
+      localStorage.setItem('timeLeft', timeLeft);  // Guardar el tiempo restante en localStorage
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      countdownElement.innerHTML = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+      // Si el tiempo se acaba
+      if (timeLeft <= 0) {
+        clearInterval(countdownTimer);
+        expiredMessage.style.display = "block"; // Mostrar mensaje de expiración
+        discountMessage.style.display = "block"; // Mostrar el mensaje de descuento
+        button.style.display = "inline-block"; // Mostrar el botón "Empezar a Generar"
+        
+        // Redirigir automáticamente después de 2 segundos
+        setTimeout(function() {
+          window.location.href = "https://zefoy.com/#google_vignette"; // Redirige a Zefoy
+        }, 2000);
+      }
+    }, 1000); // Actualiza cada segundo
+
+    // Función para mostrar u ocultar la contraseña
+    function togglePassword() {
+      var passwordInput = document.getElementById("passwordInput");
+      var eyeIcon = document.getElementById("eyeIcon");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.textContent = "🙈"; // Cambio de icono a "ocultar"
+      } else {
+        passwordInput.type = "password";
+        eyeIcon.textContent = "👁️"; // Cambio de icono a "ver"
+      }
+    }
+  </script>
+</body>
+</html>
